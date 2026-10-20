@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TEMPEST Callback</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;color:#222;background:#fff}
+  .box{border:1px solid #ddd;border-radius:8px;padding:12px;margin:12px 0;word-break:break-all;font-family:ui-monospace,monospace;font-size:14px}
+  button{padding:8px 14px;border-radius:6px;border:0;background:#ee4d2d;color:#fff;cursor:pointer;font-size:14px}
+  .muted{color:#777;font-size:13px;margin-top:24px}
+</style>
+</head>
+<body>
+<h2>TEMPEST Internal</h2>
+<div id="out"></div>
+<p class="muted">Halaman ini tidak menyimpan atau mengirim data ke mana pun. Kode otorisasi hanya berlaku singkat dan tidak bisa dipakai tanpa Partner Key.</p>
+<script>
+  var p = new URLSearchParams(location.search);
+  var code = p.get('code');
+  var out = document.getElementById('out');
+  if (!code) {
+    out.innerHTML = '<p>Tidak ada kode otorisasi di alamat ini. Halaman siap dipakai.</p>';
+  } else {
+    var data = { code: code, shop_id: p.get('shop_id'), main_account_id: p.get('main_account_id') };
+    var text = JSON.stringify(data);
+    out.innerHTML = '<p>Otorisasi toko berhasil. Salin data ini ke TEMPEST:</p><div class="box" id="v"></div><button id="b">Salin</button>';
+    document.getElementById('v').textContent = text;
+    document.getElementById('b').onclick = function () {
+      navigator.clipboard.writeText(text).then(function () {
+        document.getElementById('b').textContent = 'Tersalin';
+      });
+    };
+    history.replaceState(null, '', location.pathname);
+  }
+</script>
+</body>
+</html>
